@@ -29,6 +29,7 @@ monthgrid = unique(CO2data.MONTH);
 
 
 PCO2_SW = NaN(height(longrid), height(latgrid), height(monthgrid));
+SST = NaN(height(longrid), height(latgrid), height(monthgrid));
 
 %% 2b. Pull out the seawater pCO2 (PCO2_SW) and sea surface temperature (SST)
 %data and reshape it into your new 3-dimensional arrays
@@ -37,14 +38,12 @@ PCO2_SW = NaN(height(longrid), height(latgrid), height(monthgrid));
 
 for i = 1:height(CO2data)
     row  = find(longrid == CO2data.LON(i));
-    %%col  = find(latgrid == CO2data.LAT(i));
+    col  = find(latgrid == CO2data.LAT(i));
     page = find(monthgrid == CO2data.MONTH(i));
     colSST = 9;
     colpCO2_SW = 4;
-    if ~isnan(row) && ~isnan(page)
-        PCO2_SW(row, colpCO2_SW, page) = CO2data.PCO2_SW(i);
-        PCO2_SW(row, colSST, page) = CO2data.SST(i);
-    end
+    PCO2_SW(row, col, page) = CO2data.PCO2_SW(i);
+    SST(row, col , page) = CO2data.SST(i);
 end
 %% 3a. Make a quick plot to check that your reshaped data looks reasonable
 %Use the imagesc plotting function, which will show a different color for
@@ -53,6 +52,7 @@ end
 %January
 
 imagesc(SST(:,:,1))
+
 
 %% 3b. Now pretty global maps of one month of each of SST and pCO2 data.
 %I have provided example code for plotting January sea surface temperature
@@ -72,12 +72,42 @@ title('January Sea Surface Temperature (^oC)')
 %interval, color of the contour lines, labels, etc.
 
 %<--
+figure(2); clf
+worldmap world
+contourfm(latgrid, longrid, PCO2_SW(:,:,1)','linecolor','none');
+colorbar
+geoshow('landareas.shp','FaceColor','black')
+title('January Sea Surface Temperature (^oC)')
+
+figure(3); clf
+worldmap world
+contourfm(latgrid, longrid, SST(:,:,2)','linecolor','none');
+colorbar
+geoshow('landareas.shp','FaceColor','black')
+title('January Sea Surface Temperature (^oC)')
+
 
 %% 4. Calculate and plot a global map of annual mean pCO2
 %<--
 
+annualMeanPCO2 = mean(PCO2_SW, 3, 'omitnan');
+
+figure(4); clf
+worldmap world
+contourfm(latgrid, longrid, annualMeanPCO2','linecolor','none');
+colorbar
+geoshow('landareas.shp','FaceColor','black')
+title('Annual Mean Seawater pCO2 (µatm)')
+
+
 %% 5. Calculate and plot a global map of the difference between the annual mean seawater and atmosphere pCO2
 %<--
+
+annualmeanAtmospherePCO2 = mean(CO2data.PCO2_AIR, 2, 'omitnan');
+
+difference = annualMeanPCO2
+
+
 
 %% 6. Calculate relative roles of temperature and of biology/physics in controlling seasonal cycle
 %<--
