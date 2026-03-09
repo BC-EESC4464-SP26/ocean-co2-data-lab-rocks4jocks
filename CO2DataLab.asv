@@ -105,7 +105,7 @@ title('Annual Mean Seawater pCO2 (µatm)')
 
 annualmeanAtmospherePCO2 = mean(CO2data.PCO2_AIR, 2, 'omitnan');
 
-difference = ann
+annualmeanA
 
 
 

@@ -103,9 +103,19 @@ title('Annual Mean Seawater pCO2 (µatm)')
 %% 5. Calculate and plot a global map of the difference between the annual mean seawater and atmosphere pCO2
 %<--
 
-annualmeanAtmospherePCO2 = mean(CO2data.PCO2_AIR, 2, 'omitnan');
+annualmeanAtmospherePCO2 = 386.95; %% ppm
 
-difference = annualMeanPCO2
+
+meanDifference = annualmeanAtmospherePCO2 - annualMeanPCO2;
+
+
+figure(5); clf
+worldmap world
+contourfm(latgrid, longrid, meanDifference','linecolor','none');
+colorbar
+geoshow('landareas.shp','FaceColor','black')
+title('Annual Difference in Mean Seawater and Atmosphere pCO2 (µatm)')
+
 
 
 
