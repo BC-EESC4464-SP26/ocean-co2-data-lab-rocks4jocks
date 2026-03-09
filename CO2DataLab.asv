@@ -4,9 +4,9 @@
 % to the overall instructions and questions from the lab assignment sheet.
 
 %% 1. Read in the monthly gridded CO2 data from the .csv file
-% The data file is included in your repository as “LDEO_GriddedCO2_month_flux_2006c.csv”
+% The data file is included in your repository as â€œLDEO_GriddedCO2_month_flux_2006c.csvâ€
 % Your task is to write code to read this in to MATLAB
-% Hint: you can again use the function “readtable”, and use your first data lab code as an example.
+% Hint: you can again use the function â€œreadtableâ€, and use your first data lab code as an example.
 %<--
 
 CO2data = readtable("LDEO_GriddedCO2_month_flux_2006c.csv");
@@ -37,13 +37,11 @@ PCO2_SW = NaN(height(longrid), height(latgrid), height(monthgrid));
 
 for i = 1:height(CO2data)
     row  = find(longrid == CO2data.LON(i));
-    %%col  = find(latgrid == CO2data.LAT(i));
+    col  = find(latgrid == CO2data.LAT(i));
     page = find(monthgrid == CO2data.MONTH(i));
-    colSST = 9;
-    colpCO2_SW = 4;
-    if ~isnan(row) && ~isnan(page)
-        PCO2_SW(row, colpCO2_SW, page) = CO2data.PCO2_SW(i);
-        PCO2_SW(row, colSST, page) = CO2data.SST(i);
+    if ~isnan(row) && ~isnan(col) && ~isnan(page)
+        PCO2_SW(row, col, page) = CO2data.PCO2_SW(i);
+        SST(row, col, page) = CO2data.SST(i);
     end
 end
 %% 3a. Make a quick plot to check that your reshaped data looks reasonable
