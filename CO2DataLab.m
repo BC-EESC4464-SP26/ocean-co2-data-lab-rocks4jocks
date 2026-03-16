@@ -126,6 +126,19 @@ colorbar
 %% 6. Calculate relative roles of temperature and of biology/physics in controlling seasonal cycle
 %<--
 
+tMean = repmat(mean(SST, 3, "omitnan"), [1, 1, 12]);
+
+pCO2_atTmean = PCO2_SW .* exp(0.0423 * (tMean - SST));
+
+pCO2_mean = repmat(mean(PCO2_SW, 3, "omitnan"), [1, 1, 12]);
+
+pCO2_atTobsv = pCO2_mean .* exp(0.0423 * (SST - tMean));
+
+pCO2_bio = max(pCO2_atTmean, [], 3) - min(pCO2_atTmean, [], 3);
+
+pCO2_temp = max(pCO2_atTobsv, [], 3) - min(pCO2_atTobsv, [], 3);
+
+
 
 
 
@@ -136,6 +149,20 @@ colorbar
 %section of 14 degrees longitude - I picked the middle point)
 
 %<--
+
+% Pull out and reshape seasonal cycle data for BATS, Station P, and Ross Sea
+stations = {'BATS', 'Station P', 'Ross Sea'};
+[~, latIdx] = min(abs(latgrid + 76.51));
+
+lonIndex = find(longrid >= 169 | longrid <= -177);
+
+months = 1:12;
+
+pCO2_RossSea = PCO2_SW(lonIndex, latIdx, months);
+
+
+
+
 
 %% 8. Reproduce your own versions of the maps in figures 7-9 in Takahashi et al. 2002
 % But please use better colormaps!!!

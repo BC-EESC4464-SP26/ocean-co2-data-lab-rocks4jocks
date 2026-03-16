@@ -1,8 +1,9 @@
 %% Add your names in a comment here at the beginning of the code!
 
-import cmocean.*
 % Instructions: Follow through this code step by step, while also referring
 % to the overall instructions and questions from the lab assignment sheet.
+
+addpath('C:\Users\nuhin\git\ocean-co2-data-lab-rocks4jocks')
 
 %% 1. Read in the monthly gridded CO2 data from the .csv file
 % The data file is included in your repository as “LDEO_GriddedCO2_month_flux_2006c.csv”
@@ -116,7 +117,7 @@ worldmap world
 contourfm(latgrid, longrid, meanDifference','Linecolor','none');
 geoshow('landareas.shp','FaceColor','black')
 title('Annual Difference in Mean Seawater and Atmosphere pCO2 (µatm)')
-colormap(cmocean('tarn'));
+colormap(cmocean('balance'));
 colorbar
 
 
@@ -124,6 +125,20 @@ colorbar
 
 %% 6. Calculate relative roles of temperature and of biology/physics in controlling seasonal cycle
 %<--
+
+tMean = repmat(mean(SST, 3, "omitnan"), [1, 1, 12]);
+
+pCO2_atTmean = PCO2_SW .* exp(0.0423 * (tMean - SST));
+
+pCO2_mean = repmat(mean(PCO2_SW, 3, "omitnan"), [1, 1, 12]);
+
+pCO2_atTobsv = pCO2_mean .* exp(0.0423 * (SST - tMean));
+
+pCO2_bio = max(pCO2_atTmean, [], 3) - min(pCO2_atTmean, [], 3);
+
+pCO2_temp = max(pCO2_atTobsv, [], 3) - min(pCO2_atTobsv, [], 3);
+
+
 
 
 
@@ -134,6 +149,16 @@ colorbar
 %section of 14 degrees longitude - I picked the middle point)
 
 %<--
+
+% Pull out and reshape seasonal cycle data for BATS, Station P, and Ross Sea
+stations = {'BATS', 'Station P', 'Ross Sea'};
+[~, latIdx] = min(abs(latgrid + 76.51));
+
+lonIndex = find(longrid >= 169 | longrid <= -177);
+
+mo
+
+
 
 %% 8. Reproduce your own versions of the maps in figures 7-9 in Takahashi et al. 2002
 % But please use better colormaps!!!
