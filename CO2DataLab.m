@@ -3,6 +3,8 @@
 % Instructions: Follow through this code step by step, while also referring
 % to the overall instructions and questions from the lab assignment sheet.
 
+addpath('C:\Users\nuhin\git\ocean-co2-data-lab-rocks4jocks')
+
 %% 1. Read in the monthly gridded CO2 data from the .csv file
 % The data file is included in your repository as “LDEO_GriddedCO2_month_flux_2006c.csv”
 % Your task is to write code to read this in to MATLAB
@@ -10,6 +12,7 @@
 %<--
 
 CO2data = readtable("LDEO_GriddedCO2_month_flux_2006c.csv");
+
 
 %% 2a. Create new 3-dimensional arrays to hold reshaped data
 %Find each unique longitude, latitude, and month value that will define
@@ -103,7 +106,7 @@ title('Annual Mean Seawater pCO2 (µatm)')
 %% 5. Calculate and plot a global map of the difference between the annual mean seawater and atmosphere pCO2
 %<--
 
-annualmeanAtmospherePCO2 = 386.95; %% ppm
+annualmeanAtmospherePCO2 = 369.64; %% ppm
 
 
 meanDifference = annualmeanAtmospherePCO2 - annualMeanPCO2;
@@ -111,16 +114,22 @@ meanDifference = annualmeanAtmospherePCO2 - annualMeanPCO2;
 
 figure(5); clf
 worldmap world
-contourfm(latgrid, longrid, meanDifference','linecolor','none');
-colorbar
+contourfm(latgrid, longrid, meanDifference','Linecolor','none');
 geoshow('landareas.shp','FaceColor','black')
 title('Annual Difference in Mean Seawater and Atmosphere pCO2 (µatm)')
+colormap(cmocean('balance'));
+colorbar
 
 
 
 
 %% 6. Calculate relative roles of temperature and of biology/physics in controlling seasonal cycle
 %<--
+
+
+
+
+
 
 %% 7. Pull out and plot the seasonal cycle data from stations of interest
 %Do for BATS, Station P, and Ross Sea (note that Ross Sea is along a
