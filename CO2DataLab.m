@@ -151,15 +151,35 @@ pCO2_temp = max(pCO2_atTobsv, [], 3) - min(pCO2_atTobsv, [], 3);
 %<--
 
 % Pull out and reshape seasonal cycle data for BATS, Station P, and Ross Sea
-stations = {'BATS', 'Station P', 'Ross Sea'};
-[~, latIdx] = min(abs(latgrid + 76.51));
 
-lonIndex = find(longrid >= 169 | longrid <= -177);
+lon = longrid;
+lon(lon > 180) = lon(lon > 180) - 360;
 
 months = 1:12;
 
-pCO2_RossSea = PCO2_SW(lonIndex, latIdx, months);
+[~, latIdx_BATS] = min(abs(latgrid - 31.7));
+[~, lonIdx_BATS] = min(abs(lon - (-64.2)));
+pCO2_BATS = squeeze(PCO2_SW(lonIdx_BATS, latIdx_BATS, :));
 
+[~, latIdx_P] = min(abs(latgrid - 50));
+[~, lonIdx_P] = min(abs(lon - (-145)));
+pCO2_StationP = squeeze(PCO2_SW(lonIdx_P, latIdx_P, :));
+
+[~, latIdx_RS] = min(abs(latgrid - (-76.5)));
+lonIdx_RS = find(lon >= 169 | lon <= -177);
+pCO2_RossSea = squeeze(mean(PCO2_SW(lonIdx_RS, latIdx_RS, :), 1, 'omitnan'));
+
+figure; clf
+
+plot(months, pCO2_BATS, '-o', 'LineWidth', 2, 'DisplayName', 'BATS'); hold on
+plot(months, pCO2_StationP, '-o', 'LineWidth', 2, 'DisplayName', 'Station P');
+plot(months, pCO2_RossSea, '-o', 'LineWidth', 2, 'DisplayName', 'Ross Sea');
+
+xlabel('Month')
+ylabel('pCO2 (\muatm)')
+title('Seasonal Cycle of Seawater pCO2')
+legend
+grid on
 
 
 

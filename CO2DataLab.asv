@@ -152,11 +152,19 @@ pCO2_temp = max(pCO2_atTobsv, [], 3) - min(pCO2_atTobsv, [], 3);
 
 % Pull out and reshape seasonal cycle data for BATS, Station P, and Ross Sea
 stations = {'BATS', 'Station P', 'Ross Sea'};
-[~, latIdx] = min(abs(latgrid + 76.51));
+[~, latIdx] = min(abs(latgrid - 76.51));
 
 lonIndex = find(longrid >= 169 | longrid <= -177);
 
-mo
+months = 1:12;
+
+pCO2_RossSea = PCO2_SW(lonIndex, latIdx, months);
+
+lonIDX_BATS = find(latgrid >= 24 & l <= 38);
+latIDX_BATS = find(longrid >= 54 & longrid <= 68);
+
+pCO2_BATS = PCO2_SW(lonIdx_BATS, latIdx_BATS, months);
+
 
 
 
